@@ -1,0 +1,2 @@
+# SYSplitTableView
+仿照 UISplitViewController 写了一个简单的View组件，左侧为tableView，右侧为collectionView
