@@ -16,7 +16,8 @@
 
 - (instancetype)initWithFrame:(CGRect)frame MasterWidth:(CGFloat)width dataSource:(id<SplitTableViewDataSource>)dataSource delegate:(id<SplitTableViewDelegate>)delegate {
     if (self = [super initWithFrame:frame]) {
-        self.masterTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+        self.masterTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+        self.masterTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0.1)];
 //        self.detailTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
         layout.scrollDirection = UICollectionViewScrollDirectionVertical;
@@ -64,23 +65,45 @@
 #pragma mark - CollectionView
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
-    return [self.delegate collectionView:collectionView layout:collectionViewLayout insetForSectionAtIndex:section];
+    if ([self.delegate respondsToSelector:@selector(collectionView:layout:insetForSectionAtIndex:)]) {
+        return [self.delegate collectionView:collectionView layout:collectionViewLayout insetForSectionAtIndex:section];
+    } else {
+        return UIEdgeInsetsZero;
+    }
+    
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    return [self.delegate sender:collectionView didSelectRowAtIndexPath:indexPath];
+    if ([self.delegate respondsToSelector:@selector(sender:didSelectRowAtIndexPath:)]) {
+        [self.delegate sender:collectionView didSelectRowAtIndexPath:indexPath];
+    }
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return [self.delegate collectionView:collectionView sizeForItemAtIndexPath:indexPath];
+    if ([self.delegate respondsToSelector:@selector(collectionView:sizeForItemAtIndexPath:)]) {
+        return [self.delegate collectionView:collectionView sizeForItemAtIndexPath:indexPath];
+    } else {
+        return CGSizeZero;
+    }
+    
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return [self.dataSource sender:collectionView numberOfRowsInSection:section];
+    if ([self.dataSource respondsToSelector:@selector(sender:numberOfRowsInSection:)]) {
+        return [self.dataSource sender:collectionView numberOfRowsInSection:section];
+    } else {
+        return 0;
+    }
+    
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return [self.dataSource sender:collectionView cellForRowAtIndexPath:indexPath];
+    if ([self.dataSource respondsToSelector:@selector(sender:cellForRowAtIndexPath:)]) {
+        return [self.dataSource sender:collectionView cellForRowAtIndexPath:indexPath];
+    } else {
+        return [UICollectionViewCell new];
+    }
+    
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
@@ -89,28 +112,67 @@
 
 #pragma mark - TableView
 
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if ([self.delegate respondsToSelector:@selector(tableView:viewForHeaderInSection:)]) {
+        return [self.delegate tableView:tableView viewForHeaderInSection:section];
+    } else {
+        return [UIView new];
+    }
+    
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if ([self.delegate respondsToSelector:@selector(tableView:heightForHeaderInSection:)]) {
+        return [self.delegate tableView:tableView heightForHeaderInSection:section];
+    } else {
+        return 0.1;
+    }
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     return 0.1f;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [self.delegate sender:tableView didSelectRowAtIndexPath:indexPath];
+    if ([self.delegate respondsToSelector:@selector(sender:didSelectRowAtIndexPath:)]) {
+        [self.delegate sender:tableView didSelectRowAtIndexPath:indexPath];
+    }
+    
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return [self.dataSource tableView:tableView titleForHeaderInSection:section];
+    if ([self.dataSource respondsToSelector:@selector(tableView:titleForHeaderInSection:)]) {
+        return [self.dataSource tableView:tableView titleForHeaderInSection:section];
+    } else {
+        return nil;
+    }
+    
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return [self.dataSource numberOfSectionsInTableView:tableView];
+    if ([self.dataSource respondsToSelector:@selector(numberOfSectionsInTableView:)]) {
+        return [self.dataSource numberOfSectionsInTableView:tableView];
+    } else {
+        return 1;
+    }
+    
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.dataSource sender:tableView numberOfRowsInSection:section];
+    if ([self.dataSource respondsToSelector:@selector(sender:numberOfRowsInSection:)]) {
+        return [self.dataSource sender:tableView numberOfRowsInSection:section];
+    } else {
+        return 0;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [self.dataSource sender:tableView cellForRowAtIndexPath:indexPath];
+    if ([self.dataSource respondsToSelector:@selector(sender:cellForRowAtIndexPath:)]) {
+        return [self.dataSource sender:tableView cellForRowAtIndexPath:indexPath];
+    } else {
+        return [UITableViewCell new];
+    }
+    
 }
 
 @end

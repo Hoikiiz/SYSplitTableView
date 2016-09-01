@@ -105,6 +105,7 @@
         view.layer.cornerRadius = 4;
         view.backgroundColor = [UIColor orangeColor];
         [cell.contentView addSubview:view];
+        
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 70, 60, 20)];
         label.text = self.currentDetailDataSource[indexPath.item];
         label.textAlignment = NSTextAlignmentCenter;
@@ -115,7 +116,7 @@
         label.text = self.currentDetailDataSource[indexPath.item];
         [cell.contentView addSubview:label];
         UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, cell.frame.size.height - 1, cell.frame.size.width, 1)];
-        line.backgroundColor = [UIColor lightGrayColor];
+        line.backgroundColor = [UIColor colorWithRed:0.89 green:0.89 blue:0.90 alpha:1.00];
         [cell.contentView addSubview:line];
     }
     
@@ -125,13 +126,30 @@
 
 #pragma mark - SplitTableViewDelegate
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (tableView == self.mainTableView.masterTableView) {
-        return self.masterSectionDataSource[section];
+        UILabel *lab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.mainTableView.masterWidth, 50)];
+        lab.backgroundColor = [UIColor lightGrayColor];
+        lab.text = self.masterSectionDataSource[section];
+        lab.textAlignment = NSTextAlignmentCenter;
+        return lab;
     } else {
         return nil;
     }
+    
 }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 50;
+}
+
+//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+//    if (tableView == self.mainTableView.masterTableView) {
+//        return self.masterSectionDataSource[section];
+//    } else {
+//        return nil;
+//    }
+//}
 
 - (void)sender:(id)sender didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (sender == self.mainTableView.masterTableView) {
