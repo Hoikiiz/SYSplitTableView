@@ -133,6 +133,14 @@
     return 0.1f;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([self.delegate respondsToSelector:@selector(tableView:heightForRowAtIndexPath:)]) {
+       return [self.delegate tableView:tableView heightForRowAtIndexPath:indexPath];
+    } else {
+        return 44;
+    }
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([self.delegate respondsToSelector:@selector(sender:didSelectRowAtIndexPath:)]) {
         [self.delegate sender:tableView didSelectRowAtIndexPath:indexPath];
@@ -146,7 +154,6 @@
     } else {
         return nil;
     }
-    
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
