@@ -9,7 +9,7 @@
 #import "CategoryTableView.h"
 
 @interface CategoryTableView()<SplitTableViewDelegate,SplitTableViewDataSource>
-
+//@property (strong, nonatomic) UITableView *bottomTableView;
 @end
 
 @implementation CategoryTableView
@@ -19,11 +19,29 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.mainTableView = [[SplitTableView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height) MasterWidth:frame.size.width / 2.0 dataSource:self delegate:self];
+        UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)self.mainTableView.detailCollectionView.collectionViewLayout;
+        layout.minimumLineSpacing = 10;
+        layout.minimumInteritemSpacing = 20;
         [self addSubview:self.mainTableView];
         self.cacheData = [NSMutableDictionary dictionary];
+//        self.bottomTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, self.frame.size.width, self.frame.size.height - 64) style:UITableViewStylePlain];
+//        [self insertSubview:self.bottomTableView atIndex:0];
+//        self.bottomTableView.delegate = self;
+//        self.bottomTableView.dataSource = self;
     }
     return self;
 }
+
+//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+//    return 10;
+//}
+//
+//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@""];
+//    cell.textLabel.text = @"Cell";
+//    return cell;
+//}
 
 
 - (void)layoutSubviews {
@@ -60,6 +78,11 @@
     } else {
         return 1;
     }
+}
+
+- (void)sender:(id)sender didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"deselect");
 }
 
 - (NSInteger)sender:(id)sender numberOfRowsInSection:(NSInteger)section {
@@ -111,6 +134,7 @@
         label.textAlignment = NSTextAlignmentCenter;
         label.font = [UIFont systemFontOfSize:8];
         [cell.contentView addSubview:label];
+        cell.layer.borderColor = [UIColor redColor].CGColor;
     } else {
         UILabel *label = [[UILabel alloc] initWithFrame:cell.bounds];
         label.text = self.currentDetailDataSource[indexPath.item];

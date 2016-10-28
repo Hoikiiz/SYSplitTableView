@@ -10,12 +10,13 @@
 #import "CategoryTableView.h"
 
 
-@interface ViewController ()<CategoryTableViewDelegate>
+@interface ViewController ()<CategoryTableViewDelegate,UITableViewDelegate,UITableViewDataSource>
 @property (strong, nonatomic) UIButton *showBtn;
 @property (strong, nonatomic) CategoryTableView *tableView;
 @property (strong, nonatomic) NSArray *masterData;
 @property (strong, nonatomic) NSArray *masterSection;
 @property (strong, nonatomic) NSArray *currentArray;
+
 @end
 
 @implementation ViewController
@@ -39,7 +40,17 @@
     [self.tableView reload];
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithTitle:@"Change" style:UIBarButtonItemStyleDone target:self action:@selector(bbiClick)];
     self.navigationItem.rightBarButtonItem = bbi;
+    
+    
+    
 }
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 10;
+}
+
+
 
 - (void)bbiClick {
     self.tableView.isItem = !self.tableView.isItem;

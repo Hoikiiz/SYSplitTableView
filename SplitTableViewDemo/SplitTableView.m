@@ -106,9 +106,17 @@
     
 }
 
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-    return 0.1f;
-}
+//- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+//    if ([self.delegate respondsToSelector:@selector(collec)]) {
+//        return [self.delegate collectionView:collectionView layout:collectionViewLayout minimumLineSpacingForSectionAtIndex:section];
+//    } else {
+//        return 10;
+//    }
+//}
+//
+//- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
+//    return 0.1f;
+//}
 
 #pragma mark - TableView
 
@@ -146,6 +154,14 @@
         [self.delegate sender:tableView didSelectRowAtIndexPath:indexPath];
     }
     
+}
+
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([self.delegate respondsToSelector:@selector(sender:didDeselectRowAtIndexPath:)]) {
+        [self.delegate sender:tableView didDeselectRowAtIndexPath:indexPath];
+    } else if ([self.delegate respondsToSelector:@selector(tableView:didDeselectRowAtIndexPath:)]) {
+        [self.delegate tableView:tableView didDeselectRowAtIndexPath:indexPath];
+    }
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
